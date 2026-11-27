@@ -7,7 +7,6 @@ import es.michaelmarquez.biblioteca.modelo.Socio;
 import es.michaelmarquez.biblioteca.servicio.Biblioteca;
 
 import java.io.IOException;
-import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -85,14 +84,7 @@ public class AlmacenCsv {
         if (Files.notExists(ruta)) {
             return resultado;
         }
-        List<String> lineas;
-        try {
-            lineas = Files.readAllLines(ruta, StandardCharsets.UTF_8);
-        } catch (MalformedInputException e) {
-            // Pasa si se abre el CSV con Excel o el Bloc de notas y se guarda en ANSI
-            throw new IOException(nombreFichero + " no está guardado en UTF-8;"
-                    + " guárdalo como UTF-8 y vuelve a abrir el programa", e);
-        }
+        List<String> lineas = Files.readAllLines(ruta, StandardCharsets.UTF_8);
         for (int i = 1; i < lineas.size(); i++) {
             String linea = lineas.get(i);
             if (linea.isBlank()) {

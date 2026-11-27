@@ -9,20 +9,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
-/**
- * Aquí están todas las reglas de la biblioteca. No lee ni escribe en consola
- * ni en ficheros, así se puede probar con JUnit sin nada más.
- * Los métodos que dependen del día reciben la fecha como parámetro por el mismo motivo.
- */
+// Reglas de la biblioteca. La fecha se pasa como parámetro para poder probarlo con JUnit.
 public class Biblioteca {
 
     public static final int MAX_PRESTAMOS_POR_SOCIO = 3;
@@ -52,7 +46,6 @@ public class Biblioteca {
                 throw new IllegalArgumentException("el socio número " + socio.getNumero() + " está repetido");
             }
         }
-        comprobarPrestamosActivos(prestamos);
         this.prestamos.addAll(prestamos);
 
         siguienteIdPrestamo = prestamos.stream()
@@ -67,26 +60,6 @@ public class Biblioteca {
                 .mapToInt(Integer::intValue)
                 .max()
                 .orElse(0) + 1;
-    }
-
-    // Los préstamos devueltos pueden ser de libros o socios ya dados de baja,
-    // pero uno activo tiene que apuntar a un libro y un socio que existan.
-    private void comprobarPrestamosActivos(List<Prestamo> prestamos) {
-        Set<String> librosFuera = new HashSet<>();
-        for (Prestamo p : prestamos) {
-            if (!p.estaActivo()) {
-                continue;
-            }
-            if (!libros.containsKey(p.getIsbn())) {
-                throw new IllegalArgumentException("el préstamo " + p.getId() + " es de un libro que no existe");
-            }
-            if (!socios.containsKey(p.getNumeroSocio())) {
-                throw new IllegalArgumentException("el préstamo " + p.getId() + " es de un socio que no existe");
-            }
-            if (!librosFuera.add(p.getIsbn())) {
-                throw new IllegalArgumentException("el libro " + p.getIsbn() + " tiene dos préstamos activos");
-            }
-        }
     }
 
     public void altaLibro(Libro libro) throws BibliotecaException {
@@ -152,7 +125,6 @@ public class Biblioteca {
         }
         Socio socio = new Socio(siguienteNumeroSocio, nombre, email);
         socios.put(socio.getNumero(), socio);
-        // Se incrementa después de crear el socio: si el nombre o el email no valen, no se gasta el número
         siguienteNumeroSocio++;
         return socio;
     }

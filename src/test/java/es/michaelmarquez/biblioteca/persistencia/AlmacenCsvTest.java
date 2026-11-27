@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -118,21 +117,6 @@ class AlmacenCsvTest {
     }
 
     @Test
-    void unPrestamoActivoDeUnSocioQueNoExisteNoSeCarga() throws IOException {
-        Files.writeString(carpeta.resolve("libros.csv"),
-                "isbn;titulo;autor;anio;genero\n"
-                        + "9788437602547;Nada;Carmen Laforet;1945;NOVELA\n",
-                StandardCharsets.UTF_8);
-        Files.writeString(carpeta.resolve("prestamos.csv"),
-                "id;isbn;numeroSocio;fechaPrestamo;fechaLimite;fechaDevolucion\n"
-                        + "1;9788437602547;77;2026-01-10;2026-01-24;\n",
-                StandardCharsets.UTF_8);
-
-        IOException e = assertThrows(IOException.class, () -> new AlmacenCsv(carpeta).cargar());
-        assertTrue(e.getMessage().startsWith("Datos incoherentes"));
-    }
-
-    @Test
     void unIsbnRepetidoNoSeCarga() throws IOException {
         Files.writeString(carpeta.resolve("libros.csv"),
                 "isbn;titulo;autor;anio;genero\n"
@@ -142,14 +126,5 @@ class AlmacenCsvTest {
 
         IOException e = assertThrows(IOException.class, () -> new AlmacenCsv(carpeta).cargar());
         assertTrue(e.getMessage().contains("repetido"));
-    }
-
-    @Test
-    void unFicheroQueNoEstaEnUtf8DaUnAvisoClaro() throws IOException {
-        String contenido = "numero;nombre;email\n1;Sara Benítez Ruiz;sara.benitez@example.com\n";
-        Files.write(carpeta.resolve("socios.csv"), contenido.getBytes(Charset.forName("windows-1252")));
-
-        IOException e = assertThrows(IOException.class, () -> new AlmacenCsv(carpeta).cargar());
-        assertTrue(e.getMessage().contains("socios.csv no está guardado en UTF-8"));
     }
 }

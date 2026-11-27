@@ -3,11 +3,7 @@ package es.michaelmarquez.biblioteca.ui;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-/**
- * Lectura de datos por teclado. Siempre se lee la línea entera con nextLine()
- * y luego se convierte, así no quedan saltos de línea colgando en el Scanner
- * como pasa al mezclar nextInt() y nextLine().
- */
+// Siempre nextLine() y luego se convierte, para no mezclar nextInt() con nextLine()
 public class Entrada {
 
     private final Scanner scanner;

@@ -1,74 +1,26 @@
 # Gestor de biblioteca
 
-Aplicación de consola en Java para llevar una biblioteca pequeña: libros, socios y préstamos.
-Controla que un socio no tenga más de 3 libros a la vez, que no se preste un libro que ya está fuera
-y los préstamos que se pasan de los 14 días. Los datos se guardan en ficheros CSV dentro de `datos/`.
+Aplicación de consola en Java para una biblioteca pequeña: libros, socios y préstamos. Un socio puede tener como mucho 3 libros a la vez, no se puede prestar un libro que ya está fuera y el programa avisa de los préstamos que pasan de 14 días. Los datos se guardan en CSV en la carpeta `datos/`.
 
-![Sesión de ejemplo en consola](docs/captura.png)
+La hice para Programación y Entornos de desarrollo (1º de DAW): clases que validan sus datos, un `enum`, excepciones propias, colecciones y streams, fechas con `LocalDate`, ficheros con `java.nio`, Maven y tests con JUnit 5.
 
-## Qué practico
+![Préstamos y devoluciones en la consola](docs/captura.png)
 
-Lo hice para los módulos de Programación y Entornos de desarrollo de DAW.
+## Cómo se ejecuta
 
-- Clases que validan sus datos en el constructor, un `enum` para los géneros y mis propias excepciones.
-- `Map` y `List`, y streams para las búsquedas y los listados.
-- Fechas con `LocalDate`: plazo de 14 días y días de retraso.
-- Leer y escribir ficheros con `java.nio.file`.
-- Maven, tests con JUnit 5 y sacar un `.jar` que se ejecuta solo.
+Con el JDK 21 y Maven, desde la carpeta del proyecto:
 
-## Tecnologías
+    mvn package
+    java -jar target/biblioteca.jar
 
-Java 21, Maven 3.9 y JUnit 5. Se abre directamente como proyecto Maven en IntelliJ IDEA o en VS Code.
+`mvn package` pasa también los tests. Los cambios se guardan al salir con la opción 0. Si las tildes salen mal en la consola de Windows, ejecuta antes `chcp 65001`.
 
-## Cómo ejecutarlo
+## Cosas que decidí
 
-Necesitas el JDK 21 y Maven en el PATH (en Windows, comprueba con `java -version` y `mvn -v`).
+El código está separado en `modelo/` (Libro, Socio, Prestamo, Genero), `servicio/` (la clase Biblioteca con las reglas y las excepciones), `persistencia/` (los CSV) y `ui/` (el menú).
 
-1. Abre una terminal en la carpeta del proyecto.
-2. Pasa los tests:
-   ```
-   mvn test
-   ```
-3. Genera el jar (`mvn package` vuelve a pasar los tests):
-   ```
-   mvn package
-   ```
-4. Ejecuta el programa desde la carpeta del proyecto, para que encuentre `datos/`:
-   ```
-   java -jar target/biblioteca.jar
-   ```
-   También se le puede pasar otra carpeta de datos: `java -jar target/biblioteca.jar C:\otra\carpeta`.
-   Si la carpeta no existe, arranca vacío y la crea al salir.
+Las reglas están en `Biblioteca` y no en el menú para poder probarlas con JUnit sin simular el teclado. Por eso los métodos que dependen del día reciben la fecha como parámetro en vez de usar `LocalDate.now()`: si no, para probar un retraso de 5 días tendría que esperar 5 días.
 
-Los cambios se guardan al elegir la opción `0. Guardar y salir` del menú principal.
-Si cierras la ventana o pulsas Ctrl+C sin pasar por la opción 0 se pierden los cambios de esa sesión.
-Si editas los CSV a mano, guárdalos en UTF-8; si no, el programa avisa y no arranca.
-Si en la consola de Windows salen mal las tildes, ejecuta antes `chcp 65001`.
+Los CSV van separados por `;` porque en los títulos hay comas a menudo, y el programa no deja meter `;` en los textos. Si un fichero tiene una línea mal o un ISBN repetido, el programa no arranca y dice qué pasa, para no sobrescribir los datos buenos al salir.
 
-## Estructura
-
-```
-biblioteca-java/
-├── pom.xml
-├── datos/                  libros.csv, socios.csv y prestamos.csv de ejemplo
-├── docs/                   captura y el script que la genera
-└── src/
-    ├── main/java/es/michaelmarquez/biblioteca/
-    │   ├── App.java            arranque: carga, menú y guardado
-    │   ├── modelo/             Libro, Socio, Prestamo, Genero, Validacion
-    │   ├── servicio/           Biblioteca (reglas) y excepciones
-    │   ├── persistencia/       AlmacenCsv
-    │   └── ui/                 MenuConsola y Entrada (lectura con Scanner)
-    └── test/java/...           LibroTest, BibliotecaTest, AlmacenCsvTest
-```
-
-## Decisiones técnicas
-
-Las reglas están en la clase `Biblioteca` y no en el menú, para poder probarlas con JUnit sin simular el teclado. Por lo mismo, los métodos que dependen del día reciben la fecha (`LocalDate hoy`) como parámetro en vez de llamar a `LocalDate.now()`: si no, no hay forma de probar un retraso de 5 días sin esperar 5 días.
-
-- CSV separado por `;` y sin librerías. Los títulos llevan comas a menudo y el punto y coma casi nunca; además no lo dejo meter en los textos para que no se rompa ninguna línea.
-- Si un fichero tiene una línea mal o los ficheros no cuadran entre sí (un préstamo de un socio que no existe, un ISBN repetido), el programa no arranca y dice qué pasa. Prefiero eso a cargar los datos a medias y que al salir se sobrescriba el fichero bueno.
-- Los números de socio no se reutilizan: si se borra el último socio, el siguiente no hereda su historial de préstamos.
-- Siempre leo con `nextLine()` y convierto yo el número, así una letra donde va un número no lanza `InputMismatchException` ni deja el `Scanner` atascado; se vuelve a preguntar.
-
-Lo que no está: solo se guarda al salir, y los títulos con tilde al principio se ordenan mal ("Ébano" sale después de la Z).
+Lo que no está: solo se guarda al salir, y los títulos que empiezan con tilde se ordenan mal ("Ébano" sale después de la Z).

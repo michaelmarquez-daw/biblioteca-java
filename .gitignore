@@ -1,14 +1,3 @@
-# Notas personales, no van al repositorio
-EXPLICACION.md
-
-# Maven
 target/
-
-# IDE
 .idea/
 *.iml
-.vscode/
-
-# Sistema
-Thumbs.db
-.DS_Store
