@@ -1,0 +1,79 @@
+C:\biblioteca> java -jar target\biblioteca.jar
+GESTOR DE BIBLIOTECA
+
+1. Libros
+2. Socios
+3. Préstamos
+0. Guardar y salir
+Opción: 3
+
+PRÉSTAMOS
+1. Prestar libro
+2. Devolver libro
+3. Préstamos activos
+4. Préstamos vencidos
+0. Volver
+Opción: 4
+Libro                       Socio                   Límite      Retraso
+Patria                      Javier Cano Molina      15/11/2026  12 días
+La sombra del viento        Lucía Romero Sanz       16/11/2026  11 días
+
+PRÉSTAMOS
+1. Prestar libro
+2. Devolver libro
+3. Préstamos activos
+4. Préstamos vencidos
+0. Volver
+Opción: 1
+ISBN del libro: 9788408041597
+Número de socio: 3
+Error: Marta Iglesias Prieto ya tiene 3 libros prestados, que es el máximo
+
+PRÉSTAMOS
+1. Prestar libro
+2. Devolver libro
+3. Préstamos activos
+4. Préstamos vencidos
+0. Volver
+Opción: 1
+ISBN del libro: 9788408041597
+Número de socio: 1
+Error: Lucía Romero Sanz tiene préstamos vencidos y debe devolverlos antes de pedir otro
+
+PRÉSTAMOS
+1. Prestar libro
+2. Devolver libro
+3. Préstamos activos
+4. Préstamos vencidos
+0. Volver
+Opción: 1
+ISBN del libro: 9788408041597
+Número de socio: 5
+Préstamo registrado. Fecha límite de devolución: 11/12/2026
+
+PRÉSTAMOS
+1. Prestar libro
+2. Devolver libro
+3. Préstamos activos
+4. Préstamos vencidos
+0. Volver
+Opción: 2
+ISBN del libro: 9788466307666
+Devuelto con 12 día(s) de retraso.
+
+PRÉSTAMOS
+1. Prestar libro
+2. Devolver libro
+3. Préstamos activos
+4. Préstamos vencidos
+0. Volver
+Opción: x
+  "x" no es un número entero.
+Opción: 0
+
+1. Libros
+2. Socios
+3. Préstamos
+0. Guardar y salir
+Opción: 0
+Datos guardados en C:\biblioteca\datos
